@@ -5,12 +5,39 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rock Paper Scissors</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <h1 class="text heading">ROCK PAPER SCISSORS</h1>
+    <h2 class="text subheading">Raise to 5</h2>
+
+    <div class="player">
+        <div class="text name">Player</div>
+        <div id="rock" class="icon playerIcon"><img src="images/rock.png" width="150" height="200"></div>
+        <div id="paper" class="icon playerIcon"><img src="images/paper.png" width="150"></div>
+        <div id="scissors" class="icon playerIcon"><img src="images/scissors.png" width="150"></div>
+        <div id="playerScore" class="text score">0</div>
+    </div>
+
+    <h2 class="text">VS</h2>
+
+    <div class="computer">
+        <div class="text name">Computer</div>
+        <div id="question" class="icon"><img src="images/question.png" width="150"></div>
+        <div id="computerScore" class="text score">0</div>
+    </div>
+
+    <h2 id="resultPrompt" class="text">Choose your weapon to begin the match!</h2>
+
+
+
+
+
+
     <script>
         function getComputerChoice(){
-            random_num = selectRandom();
-            switch(random_num){
+            let randomNum = selectRandom();
+            switch(randomNum){
                 case 0:
                     return "rock";
                     break;
@@ -26,8 +53,8 @@
             }
         }
         function selectRandom(){
-            random_num = Math.ceil(Math.random()*3);
-            return random_num;
+            randomNum = Math.ceil(Math.random()*3);
+            return randomNum;
         }
         
 
@@ -54,37 +81,15 @@
                 return [[0,1],"You lose! Rock beats Scissors"];
             }
             else if(playerSelection == "scissors" && computerSelection == "paper"){
-                return [[1,0],"You win! Scissors beats Rock"];
+                return [[1,0],"You win! Scissors beats Paper"];
             }
             else if(playerSelection == "scissors" && computerSelection == "scissors"){
                 return [[0,0],"It's a tie"];
             }
         }
-        function game(){
-            let current_score = [0,0];
-            let playerSelection;
-            let current_greatest_score = 0;
-            while(current_greatest_score < 5){
-                playerSelection = prompt("Choose your weapon");
-                playerSelection = playerSelection.toLowerCase();
-                while(playerSelection != "rock" && playerSelection != "paper" && playerSelection != "scissors"){
-                    playerSelection = prompt("Invalid weapon. Please enter a valid weapon");
-                    playerSelection = playerSelection.toLowerCase();
-                }
-                round_result = playRound(playerSelection, getComputerChoice());
-                current_score[0] = current_score[0] + round_result[0][0];
-                current_score[1] = current_score[1] + round_result[0][1];
-                current_greatest_score = getGreatestScore(current_score[0],current_score[1]);
-                console.log(round_result[1]);
-                console.log(`The current score is ${current_score[0]} - ${current_score[1]}`);
-            }
-            if(current_score[0]==5){
-                console.log("Congrats! You Win!");
-            }
-            else{
-                console.log("You lose. Better luck next time.")
-            }
-        }
+        
+
+        
         function getGreatestScore(score1, score2){
                 if(score1 >= score2){
                     return score1;
@@ -93,6 +98,76 @@
                     return score2;
                 }
             }
+
+        function changeComputerIcon(computerSelection){
+            // replace the image of computer icon in DOM with the given computerSelection id
+            computerIcon.innerHTML = "";
+            let image = document.createElement("img");
+            image.src = `images/${computerSelection}.png`;
+            image.width = "150";
+            if (computerSelection == "rock"){
+                image.height = "200";
+            }
+            computerIcon.appendChild(image);
+        }
+
+        function updateScore(resultScore){
+            // updates the score in the DOM and local accumulator by adding the resultScore to the current score
+            playerScoreAccum = playerScoreAccum + resultScore[0];
+            computerScoreAccum = computerScoreAccum + resultScore[1];
+            playerScore.textContent = playerScoreAccum.toString();
+            computerScore.textContent = computerScoreAccum.toString();
+        }
+
+        function updatePrompt(resultText){
+            // updates the prompt
+            resultPrompt.textContent = resultText;
+        }        
+
+        function clickIcon(e){
+            const selection = e.currentTarget;
+            playerIcons.forEach(playerIcon => playerIcon.classList.remove("chosen"));
+
+            selection.classList.add("chosen");
+            let playerSelection = selection.id;
+            let computerSelection = getComputerChoice();
+            let roundResult = playRound(playerSelection,computerSelection);
+            let resultScore = roundResult[0];
+            let resultText = roundResult[1];
+
+            changeComputerIcon(computerSelection);
+            updateScore(resultScore);
+
+
+            greatestScore = getGreatestScore(playerScoreAccum,computerScoreAccum);
+
+            if(greatestScore == 5){
+                if (playerScoreAccum > computerScoreAccum){
+                    resultPrompt.textContent = "Congratulations! You Win!";
+                }
+                else {
+                    resultPrompt.textContent = "Nice try. Better luck next time";
+                }
+                playerIcons.forEach(playerIcon => playerIcon.removeEventListener("click",clickIcon));
+            }
+            else {
+                updatePrompt(resultText);
+            }
+   
+        }
+        
+        let playerScoreAccum = 0;
+        let computerScoreAccum = 0;
+
+        const playerIcons = Array.from(document.querySelectorAll(".playerIcon"));
+        playerIcons.forEach(playerIcon => playerIcon.addEventListener("click",clickIcon));
+        const computerIcon = document.getElementById("question"); 
+        const resultPrompt = document.getElementById("resultPrompt");
+        const playerScore = document.getElementById("playerScore");
+        const computerScore = document.getElementById("computerScore");
+
+
+
     </script>
 </body>
 </html>

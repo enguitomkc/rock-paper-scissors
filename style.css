@@ -1,0 +1,53 @@
+body {
+    background-color: rgba(240, 248, 255, 0.966);
+}
+.player,.computer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+    padding: 0 100px;
+}
+
+.icon {
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 180px;
+    height: 200px;
+    box-shadow: 2px 1px gray;
+}
+.name,.score{
+    align-self: flex-start;
+    font-size: 20px;
+}
+.name {
+    margin-right: auto;
+}
+.score{
+    font-size: 42px;
+    margin-left: auto;
+    padding-left: 30px;
+}
+.computer .score{
+    padding-left: 52px;
+}
+
+.text {
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+h2{
+    font-size: 24px;
+    font-weight: 500;
+}
+h1,h2{
+    text-align: center;
+}
+
+/* on event styles */
+.chosen {
+    transform: scale(1.1);
+    background-color: rgb(218, 214, 214);
+}
+
