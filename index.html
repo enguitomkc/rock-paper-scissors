@@ -124,6 +124,29 @@
             resultPrompt.textContent = resultText;
         }        
 
+        function playAgain(){
+            playerScoreAccum = 0;
+            computerScoreAccum = 0;
+            playerIcons.forEach(playerIcon => playerIcon.classList.remove("chosen"));
+            changeComputerIcon("question");
+
+            playerScore.textContent = playerScoreAccum.toString();
+            computerScore.textContent = computerScoreAccum.toString();
+            resultPrompt.textContent = "Choose your weapon to begin the match!"
+            playerIcons.forEach(playerIcon => playerIcon.addEventListener("click",clickIcon));
+        }
+
+        function promptPlayAgain(){
+            // creates button that prompts to play again the game. 
+            const playAgainDiv = document.createElement("div");
+            playAgainDiv.innerHTML = "<button>Play Again</button>"
+            resultPrompt.append(playAgainDiv);
+            const playAgainBtn = document.querySelector("button");
+            playAgainBtn.addEventListener("click",playAgain);
+
+        }
+
+
         function clickIcon(e){
             const selection = e.currentTarget;
             playerIcons.forEach(playerIcon => playerIcon.classList.remove("chosen"));
@@ -149,10 +172,12 @@
                     resultPrompt.textContent = "Nice try. Better luck next time";
                 }
                 playerIcons.forEach(playerIcon => playerIcon.removeEventListener("click",clickIcon));
+                promptPlayAgain();
             }
             else {
                 updatePrompt(resultText);
             }
+
    
         }
         
